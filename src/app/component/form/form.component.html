@@ -1,0 +1,118 @@
+<!-- Write necessary code-->
+<app-header></app-header>
+
+  <div id="form-container" >
+    <div class="form">
+      <div class="form-content">
+        <div class="col-sm-12 ">
+        <div class="col-sm-8 div-header">
+          <h2 class="header">Enter Patient details</h2>
+        </div>
+
+        </div>
+
+        <!-- call submitForm method with all form values if form is valid -->
+        <form [formGroup]="complexForm" (ngSubmit)="submitForm(complexForm.value)">
+          <div class="form-group">
+            <label class="label-name">
+              First Name:<span class="required">*</span>
+            </label>
+            <input id="firstname" formControlName="firstName" class="form-control text-box" type="text" placeholder="FIRSTNAME">
+            <div *ngIf = "f.firstName.errors?.pattern && (f.firstName.dirty || f.firstName.touched)"  id="error-no-firstname" class="alert alert-danger error-msg">
+              {{emptyFirstname}}
+            </div>
+            <div *ngIf = "f.firstName.errors?.pattern && (f.firstName.dirty || f.firstName.touched)" id="error-minlength-firstname" class="alert alert-danger error-msg">
+              {{minlengthFirstname}}
+            </div>
+            <div *ngIf = "f.firstName.errors?.pattern && (f.firstName.dirty || f.firstName.touched)" id="error-maxlength-firstname" class="alert alert-danger error-msg">
+              {{maxlengthFirstname}}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label-name">Last Name:
+              <span class="required">*</span>
+            </label>
+            <input id="lastname" formControlName="lastName" class="form-control text-box" type="text" placeholder="LASTNAME">
+            <div *ngIf = "f.lastName.errors?.pattern && (f.lastName.dirty || f.lastName.touched)" id="error-no-lastname"  class="alert alert-danger error-msg">
+              {{emptyLastname}}
+            </div>
+            <div *ngIf = "f.lastName.errors?.pattern && (f.lastName.dirty || f.lastName.touched)" id="error-minlength-lastname"  class="alert alert-danger error-msg">
+              {{minlengthLastname}}
+            </div>
+            <div *ngIf = "f.lastName.errors?.pattern && (f.lastName.dirty || f.lastName.touched)" id="error-maxlength-lastname" class="alert alert-danger error-msg">
+              {{maxlengthLastname}}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label-name">Gender:
+              <span class="required">*</span>
+            </label>
+            <div class="input-div">
+            <input type="radio" formControlName="gender" id="male" class="input-content" value="Male" >
+            <label class="label-content" for="male">Male</label>
+            <input type="radio" formControlName="gender" id="female" class="input-content" value="Female" >
+            <label class="label-content" for="female">Female</label>
+            </div>
+            <div *ngIf = "f.gender.errors?.required && (f.gender.dirty || f.gender.touched)" id="error-no-gender" class="alert alert-danger error-msg">
+              {{noGender}}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label-name">
+              Date of birth:<span class="required">*</span>
+            </label>
+            <div >
+            <input id="date-input" class="form-control date-input glyphicon glyphicon-calendar" formControlName="dob" type="date" placeholder="Date of birth" min="1968-01-01" max="{{today}}">
+            </div>
+            <div *ngIf = "f.dob.errors?.required && (f.dob.dirty || f.dob.touched)" id="error-no-dob" class="alert alert-danger error-msg">
+              {{noDob}}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label-name">
+              Contact number:<span class="required">*</span>
+            </label>
+            <input id="mobile" class="form-control text-box" formControlName="mobile" type="text" placeholder="mobile number">
+            <div *ngIf = "f.mobile.errors?.pattern && (f.mobile.dirty || f.mobile.touched)" id="error-no-mobile" class="alert alert-danger error-msg">
+              {{noMobile}}
+            </div>
+            <div *ngIf = "f.mobile.errors?.pattern && (f.mobile.dirty || f.mobile.touched)" id="error-number-mobile" class="alert alert-danger error-msg">
+              {{numberMobile}}
+            </div>
+            <div *ngIf = "f.mobile.errors?.pattern && (f.mobile.dirty || f.mobile.touched)" id="error-maxlength-mobile" class="alert alert-danger error-msg">
+              {{maxlengthMobile}}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label-name" for="email">
+              Email:<span class="required">*</span>
+            </label>
+            <input id="email" class="form-control text-box" type="email" formControlName="email"  placeholder="example:abc12@tcs.com">
+
+            <div *ngIf = "f.email.errors?.pattern && (f.email.dirty || f.email.touched)" id="error-pattern-email" class="alert alert-danger error-msg">
+              {{patternEmail}}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label-name" for="description">
+              Description: <span class="xs-font">(Optional)</span>
+            </label>
+            <textarea id="description" class="form-control " formControlName="description" placeholder="Briefly describe the issue"></textarea>
+          </div>
+
+          <div class="form-group">
+          <!-- disable button if form not valid -->
+            <button type="submit" id="submit-btn" class="btn btn-primary submit-btn">Submit</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
