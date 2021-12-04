@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Router } from '@angular/router';
-import * as alertify from 'alertify.js';
+// import * as alertify from 'alertify.js';
 
 @Component({
   selector: 'app-all-requested-appointments',
@@ -12,7 +12,7 @@ export class AllRequestedAppointmentsComponent implements OnInit {
 
 	allAppointments;
 
-  constructor(private dataService: DataService, private route: Router) {
+  constructor(private dataService: DataService, private route: Router) { 
   }
 
   ngOnInit() {
@@ -35,15 +35,15 @@ export class AllRequestedAppointmentsComponent implements OnInit {
   }
 
   cancelAppointment(id) {
+
+    // delete selected appointment uing service
+    id= '6c57dfc5-2dce-4616-aa1d-9ac8bc510a3f' ;
+    // After deleting the appointment, get all requested appointments
     this.dataService.deleteAppointment(id).subscribe(res=> {
       if (res) {
         this.appointments();
       }
     })
-    // delete selected appointment uing service
-
-    // After deleting the appointment, get all requested appointments
-
 
   }
 

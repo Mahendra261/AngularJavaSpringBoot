@@ -1,4 +1,3 @@
-<!-- Write necessary code-->
 <div class="login-view-wrapper custom-container">
   <div class="login-view">
     <div class="logo-wrapper">
@@ -6,7 +5,7 @@
       <h2 >LOGIN</h2>
     </div>
     <div class="login-form-wrapper" >
-      <form class="ro-form" [formGroup]="loginForm" (ngSubmit)="doLogin()">
+      <form class="ro-form" [formGroup]="loginForm">
         <div class="form-group">
           <label class="labelHead" for="username">
             <b>Username</b>
@@ -14,20 +13,24 @@
           <input type="text" id="username" placeholder="username"
           formControlName="userName">
 
-          <div *ngIf = "f.userName.errors?.required && (f.userName.dirty || f.userName.touched)" class="form-error-messages"
-            id="error-no-username">
+          <div class="form-error-messages"
+            id="error-no-username"
+            *ngIf = "f.userName.errors?.required && (f.userName.dirty || f.userName.touched)">
             {{emptyUserName}}
           </div>
-          <div *ngIf="f.userName.errors?.minlength"  class="form-error-messages"
-            id="error-minlength-username">
+          <div class="form-error-messages"
+            id="error-minlength-username"
+            *ngIf = "f.userName.errors?.minlength && (f.userName.dirty || f.userName.touched)">
             {{minlengthUserName}}
           </div>
-          <div *ngIf = "f.userName.errors?.maxlength"  class="form-error-messages"
-            id="error-maxlength-username">
+          <div class="form-error-messages"
+            id="error-maxlength-username"
+            *ngIf = "f.userName.errors?.maxlength && (f.userName.dirty || f.userName.touched)">
             {{maxlengthUserName}}
           </div>
-          <div *ngIf = "f.userName.errors?.pattern && (f.userName.dirty || f.userName.touched)"  class="form-error-messages"
-            id="error-pattern-username">
+          <div class="form-error-messages"
+            id="error-pattern-username"
+            *ngIf = "f.userName.errors?.pattern && (f.userName.dirty || f.userName.touched)">
             {{userNamePattern}}
           </div>
         </div>
@@ -37,20 +40,24 @@
           </label>
           <input type="password" id="password" placeholder="password"
           formControlName = "password">
-          <div *ngIf = "f.password.errors?.required && (f.password.dirty || f.password.touched)" class="form-error-messages"
-            id="error-no-password">
+          <div class="form-error-messages"
+            id="error-no-password"
+            *ngIf = "f.password.errors?.required && (f.password.dirty || f.password.touched)">
             {{emptyPassword}}
           </div>
-          <div *ngIf = "f.password.errors?.minlength" class="form-error-messages"
-            id="error-minlength-password">
+          <div class="form-error-messages"
+            id="error-minlength-password"
+            *ngIf = "f.password.errors?.minlength && (f.password.dirty || f.password.touched)">            
             {{minlengthPassword}}
           </div>
-          <div *ngIf = "f.password.errors?.maxlength" class="form-error-messages"
-            id="error-maxlength-password">
+          <div class="form-error-messages"
+            id="error-maxlength-password"
+            *ngIf = "f.password.errors?.maxlength && (f.password.dirty || f.password.touched)">
             {{maxlengthPassword}}
           </div>
-          <div *ngIf = "f.password.errors?.pattern && (f.password.dirty || f.password.touched)" class="form-error-messages"
-            id="error-pattern-password">
+          <div class="form-error-messages" 
+            id="error-pattern-password"
+            *ngIf = "f.password.errors?.pattern && (f.password.dirty || f.password.touched)">
             {{passwordPattern}}
           </div>
         </div>
@@ -58,8 +65,11 @@
           <!-- disable button if form not valid -->
           <!-- call doLogin method when clicking on this button-->
           <button id="loginBtn" class="login-btn" type="submit"
-          [disabled]="!loginForm.valid">Login</button>
-      </div>
+          [disabled]="!loginForm.valid" (click)="doLogin()" >Login</button>
+          <!-- call signUp method when clicking on this button-->
+          <button id="signupBtn" class="guest-btn" 
+          (click)="signUp()">Sign up</button>
+        </div>
       </form>
     </div>
   </div>

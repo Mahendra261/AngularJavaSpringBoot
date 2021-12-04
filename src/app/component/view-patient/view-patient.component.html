@@ -30,19 +30,24 @@
 
         <!-- disable the same when clicking on this button -->
         <!-- call bookAppointment method when clicking on this button-->
-        <button id="book-appointment" class="btn btn-success book-btn">Book Appointment</button>
+        <button id="book-appointment" class="btn btn-success book-btn"
+        [disabled]= "!isBookAppointment"
+        (click)="bookAppointment()">Book Appointment</button>
 
 
 
         <!-- disable the same when clicking on this button -->
         <!-- call scheduledAppointment method when clicking on this button-->
-        <button id="Scheduled-appointment" class="btn btn-warning book-btn">Scheduled Appointment</button>
+        <button id="Scheduled-appointment" class="btn btn-warning book-btn"
+        [disabled]="!isScheduledAppointment"
+        (click)="scheduledAppointment()">Scheduled Appointment</button>
     </div>
   </div>
 
     <!-- show book appointment form if "Book Appointment" button clicked-->
     <!-- call scheduleAppointment method if form is valid-->
-    <form id="form-container" class="form-container" >
+    <form id="form-container" class="form-container" *ngIf="isFormEnabled"
+    [formGroup]="appointmentForm" >
       <h2 class="view-header" style="padding-left: 100px">Book Appointment</h2>
         <div class="form-content">
 
@@ -52,13 +57,14 @@
                   Select Disease:<span class="required">*</span>
                 </label>
                 <div>
-                  <select id="select-selectDisease" class="text-box select" >
+                  <select id="select-selectDisease" class="text-box select" formControlName="selectDisease">
                     <option class="label-content" value="null" disabled="true" >Select disease</option>
                     <!-- display diseases list-->
                     <option id="option-value" class="label-content"><!--display here--></option>
                   </select>
                 </div>
-                <div id="error-no-selectDisease" class="alert alert-danger error-msg">
+                <div id="error-no-selectDisease" class="alert alert-danger error-msg"
+                *ngIf="f.selectDisease.errors?.required && (f.selectDisease.dirty || f.selectDisease.touched)">
                   noselectDisease
                 </div>
               </div>
@@ -68,13 +74,14 @@
                 Priority:<span class="required">*</span>
               </label>
               <div>
-                <select id="priority" class="text-box select" >
+                <select id="priority" class="text-box select" formControlName="priority" >
                   <option class="label-content" value="null" disabled="true" >Select priority</option>
                   <option id="normal" class="label-content" value="Normal">Normal</option>
                   <option id="urgent" class="label-content" value="Urgent">Urgent</option>
                 </select>
               </div>
-              <div id="error-no-priority" class="alert alert-danger error-msg">
+              <div id="error-no-priority" class="alert alert-danger error-msg"
+              *ngIf="f.priority.errors?.required && (f.priority.dirty || f.priority.touched)">
                 nopriority
               </div>
             </div>
@@ -84,26 +91,30 @@
                 tentativeDate:<span class="required">*</span>
               </label>
               <div >
-                <input id="date-input" class="form-control date-input glyphicon glyphicon-calendar" type="date" placeholder="tentativeDate" min="{{today}}">
+                <input id="date-input" class="form-control date-input glyphicon glyphicon-calendar" type="date" placeholder="tentativeDate" min="{{today}}"
+                formControlName="tentativeDate">
               </div>
-              <div id="error-no-tentativeDate" class="alert alert-danger error-msg">
+              <div id="error-no-tentativeDate" class="alert alert-danger error-msg"
+              *ngIf="f.tentativeDate.errors?.required && (f.tentativeDate.dirty || f.tentativeDate.touched)">
                 notentativeDate
               </div>
             </div>
           </div>
         <div class="form-group">
           <!-- disable button if form not valid -->
-          <button type="submit" id="submit-btn" class="btn btn-primary submit-btn">Schedule</button>
+          <button type="submit" id="submit-btn" class="btn btn-primary submit-btn"
+          (click)="scheduleAppointment()"
+          [disabled]="!appointmentForm.valid">Schedule</button>
         </div>
       </div>
     </form>
 
 
   <!-- show Scheduled Appointment table if "Scheduled Appointment" button clicked-->
-  <div id="table-container" class="table-container">
+  <div id="table-container" class="table-container" *ngIf="isTableEnabled">
     <h2 class="view-header">Scheduled Appointment</h2>
     <!-- display no records found message if there is no appointment -->
-    <div class="no-records">No Records Found</div>
+    <div class="no-records" *ngIf="!ScheduledAppointmentResponse?.length">No Records Found</div>
     <table class="table-class">
       <thead>
         <tr class="table-head">
@@ -117,16 +128,16 @@
       </thead>
       <tbody>
         <!--display scheduled appointments-->
-        <tr id="table-row">
-          <td id="table-id" ><!--display id--></td>
-          <td id="table-disease" class="td-column"><!--display disease--></td>
-          <td id="table-priority" ><!--display priority--></td>
-          <td id="table-tentativedate"><!--display tentativedate--></td>
-          <td id="table-requestedOn"><!--display registeredTime--></td>
+        <tr id="table-row" *ngFor="let item of ScheduledAppointmentResponse">
+          <td id="table-id" >{{item._id}}</td>
+          <td id="table-disease" class="td-column">{{item.disease}}</td>
+          <td id="table-priority" >{{item.priority}}</td>
+          <td id="table-tentativedate">{{item.AppointmentDate| date: 'dd/MM/yyyy'}}</td>
+          <td id="table-requestedOn">{{item.bookingTime| date: 'dd/MM/yyyy hh:mm:ss'}}</td>
           <td class="column-btn">
 
             <!-- call cancelAppointment method with selected id when clicking on this button-->
-            <button id="user-cancel" class="btn btn-danger btn-spc">
+            <button id="user-cancel" class="btn btn-danger btn-spc" (click)="cancelAppointment('6c57dfc5-2dce-4616-aa1d-9ac8bc510a3f')">
               <span class="btn-value">Cancel Appointment</span>
             </button>
           </td>

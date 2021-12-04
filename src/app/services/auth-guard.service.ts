@@ -6,7 +6,7 @@ import { DataService } from './data.service';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-isLogin:  boolean;
+isLogin: boolean;
   constructor(public dataService: DataService, public router: Router) { }
 
   canActivate(): boolean {
@@ -14,9 +14,18 @@ isLogin:  boolean;
 
     this.dataService.getAuthStatus()
     .subscribe(res =>{
-      this.isLogin = res;
+      if(res){
+        this.isLogin = res;
+      }else{
+        this.router.navigate(['login']);
+      }
+    },
+    error =>{
+      this.router.navigate(['login']);
     })
+    
     return this.isLogin;
+  
   }
   
 

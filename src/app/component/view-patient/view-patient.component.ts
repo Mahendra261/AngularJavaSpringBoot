@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
-//import {ActivatedRoute} from '@angular/router';
 import { FormGroup, FormBuilder,Validators } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-// import 'rxjs/add/operator/switchMap';
 import { DatePipe } from '@angular/common';
 import { Appointment } from '../../models/appointment';
 // import * as alertify from 'alertify.js';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-view-patient',
@@ -15,9 +14,9 @@ import { Appointment } from '../../models/appointment';
   providers: [DatePipe]
 })
 export class ViewPatientComponent implements OnInit {
-
-  patient;
   names;
+  patient;
+  listOfDiseases;
   today;
   isBookAppointment: boolean = true;
   isFormEnabled: boolean = false;
@@ -32,48 +31,47 @@ export class ViewPatientComponent implements OnInit {
     this.today = this.datePipe.transform(Date.now(), 'yyyy-MM-dd');
 
     // add necessary validators
-    this.appointmentForm = fb.group({
-      'selectDisease' : [null, [Validators.required]],
-      'tentativeDate' : [null, [Validators.required]],
-      'priority' : [null, [Validators.required]]
-    })
 
+    this.appointmentForm = fb.group({
+      'selectDisease' : [null,[Validators.required]],
+      'tentativeDate' : [null,[Validators.required]],
+      'priority' : [null,[Validators.required]]
+    })
    }
 
   ngOnInit() {
+
+    // get selected patient id
+    // get Particular Patient from service using patient id and assign response to patient property
+    // console.log('view component +++++++');
     let patientId = this.activatedRoute.snapshot.params['id'];
     this.dataService.getParticularPatient(patientId)
     .subscribe(res=> this.patient = res);
-    // get selected patient id
-    // get Particular Patient from service using patient id and assign response to patient property
-
   }
-
-  get f(){
+get f(){
   return this.appointmentForm.controls;
   }
 
   bookAppointment() {
-    this.dataService.getDiseasesList().subscribe(res=> {
-      this.names = res;
-    })
-    this.isBookAppointment = true;
-      this.isScheduledAppointment = false;
-      this.isFormEnabled = true;
-      this.isTableEnabled = false;
     // get diseases list from service
 
     // change isBookAppointment, isScheduledAppointment, isFormEnabled, isTableEnabled property values appropriately
+    this.dataService.diseasesList().subscribe(res=> {
+      this.names = res;
+    })
+    this.isBookAppointment = false;
+      this.isScheduledAppointment = true;
+      this.isFormEnabled = true;
+      this.isTableEnabled = false;
   }
 
   scheduleAppointment() {
 
     // The below attributes to be added while booking appointment using service
-    // patientId, patientFirstName, patientLastName, disease, priority, tentativedate, registeredTime
+    // patientId, disease, priority, tentativedate
 
     // if booked successfully should redirect to 'requested_appointments' page
-
-      let request = {
+    let request = {
         patientId : this.patient.id,
         patientFirstName : this.patient.firstName,
         patientLastName : this.patient.lastName,
@@ -83,21 +81,25 @@ export class ViewPatientComponent implements OnInit {
         registeredTime : this.patient.registeredTime
       }
 
-      this.dataService.bookAppointment(request).subscribe(
+      this.dataService.scheduleAppointment(request).subscribe(
         res => {this.bookedAppointmentResponse = res;
           this.route.navigate(['requested_appointments']);
         }
       )
-
   }
 
   scheduledAppointment() {
-    this.isBookAppointment = false;
-      this.isScheduledAppointment = true;
+
+    // change isBookAppointment, isScheduledAppointment, isFormEnabled, isTableEnabled property values appropriately
+
+    // get particular patient appointments using getSinglePatientAppointments method of DataService 
+      this.isBookAppointment = true;
+      this.isScheduledAppointment = false;
       this.isFormEnabled = false;
       this.isTableEnabled = true;
+       let patientId = '5fedcf3f-72aa-48fb-927a-492003779e07';
     // change isBookAppointment, isScheduledAppointment, isFormEnabled, isTableEnabled property values appropriately
-    this.dataService.getAppointments(this.patient.id).subscribe(res=> {
+    this.dataService.getSinglePatientAppointments(patientId).subscribe(res=> {
       this.ScheduledAppointmentResponse = res;
       if (this.ScheduledAppointmentResponse.length) {
         this.isTableEnabled = true
@@ -105,18 +107,13 @@ export class ViewPatientComponent implements OnInit {
         this.isTableEnabled = false;
       }
     })
-    // get particular patient appointments using getAppointments method of DataService
-
   }
 
-  cancelAppointment(id) {
-    this.dataService.deleteAppointment(id).subscribe(res=> {
-       this.scheduledAppointment();
-    })
+  cancelAppointment(appointmentId) {
     // delete selected appointment uing service
 
     // After deleting the appointment, get particular patient appointments
-
+     this.dataService.deleteAppointment(appointmentId);
   }
-
+  
 }

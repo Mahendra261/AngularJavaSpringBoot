@@ -4,8 +4,7 @@
       <thead>
         <tr class="table-head">
           <th>Patient ID</th>
-          <th>FirstName</th>
-          <th>LastName</th>
+          <th>Name</th>
           <th>Gender</th>
           <th>DOB(yyyy-MM-dd)</th>
           <th>Mobile</th>
@@ -17,17 +16,16 @@
       <tbody>
         <!-- display all patients list -->
         <tr id="table-row" *ngFor="let item of allPatients">
-        	<td id="table-id" >{{item.id}}</td>
-          <td id="table-firstname" class="td-column">{{item.firstName}}</td>
-          <td id="table-lastname" >{{item.lastName}}</td>
-          <td id="table-gender">{{item.gender}}</td>
-          <td id="table-dob">{{item.dob}}</td>
-          <td id="table-mobile">{{item.mobile}}</td>
-          <td id="table-email">{{item.email}}</td>
-          <td id="table-registeredOn">{{item.registeredTime| date: 'dd/MM/yyyy hh:mm:ss'}}</td>
+          <td id="table-id" >{{item.patient_Id}}</td>
+          <td id="table-firstname" class="td-column">{{item.patient_name}}</td>
+          <td id="table-gender">{{item.patient_gender}}</td>
+          <td id="table-dob">{{item.patient_dob}}</td>
+          <td id="table-mobile">{{item.patient_mobile}}</td>
+          <td id="table-email">{{item.patient_email}}</td>
+          <td id="table-registeredOn">{{item.registeredDate| date: 'dd/MM/yyyy hh:mm:ss'}}</td>
           <td class="column-btn">
             <!--call view method with selected id when clicking this button-->
-            <a id="view" class="view-details" (click)="view(item.id)">View Details</a>
+            <a id="view" class="view-details" (click)="view(item.patient_Id)">View Details</a>
           </td>
         </tr>
       </tbody>
